@@ -1,18 +1,22 @@
 name: Generate terraform docs
-on: [pull_request]
+on:
+  push:
+    branches:
+      - main # Adjust the branch name as needed
+
 jobs:
   docs:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-      with:
-        ref: ${{ github.head_ref }}
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.ref }} # This ensures the code at the pushed ref is checked out
 
-    - name: Render terraform docs and push changes back to main
-      uses: terraform-docs/gh-actions@main
-      with:
-        working-dir: .
-        output-file: README.md
-        output-method: inject
-        git-push: "true"
-        git-commit-message: "Auto generate Terraform docs commit"
+      - name: Render terraform docs and push changes back to main
+        uses: terraform-docs/gh-actions@main
+        with:
+          working-dir: .
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
+          git-commit-message: "Auto generate Terraform docs commit"
